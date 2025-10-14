@@ -4,4 +4,4 @@ CREATE TABLE messages (
 );
 
 INSERT INTO messages (content)
-VALUES ('PostGRE works!');
+VALUES ('Successfully connected Streamlit app to PostgreSQL database');
