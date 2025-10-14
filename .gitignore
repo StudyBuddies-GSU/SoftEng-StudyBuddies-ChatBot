@@ -3,15 +3,55 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
+*.env
 *.egg-info/
 *.egg
-*.log
-
-# Virtual environments
+.env
 .venv/
-env/
 venv/
 ENV/
+env/
+*.sqlite3
 
-# Environment variables (secrets)
-.env
+# Streamlit cache & logs
+.streamlit/
+.stcache/
+.stcache2/
+*.log
+
+# Jupyter (if used later)
+.ipynb_checkpoints
+
+# macOS system files
+.DS_Store
+
+# Docker
+*.pid
+*.seed
+docker-compose.override.yml
+
+# VS Code (if using)
+.vscode/
+
+# Logs
+logs/
+*.log
+
+# Windows system files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Windows shortcut files
+*.lnk
+
+# Windows Git Bash symlinks
+*.symlink
+
+# Optional: if using WSL
+*.swp
+*.swo
+
+
+
