@@ -37,6 +37,9 @@ def get_fallback_message(conn):
         cur.execute("SELECT fallback_message FROM fallbacks LIMIT 1;")
         result = cur.fetchone()
         return result[0] if result else "No fallback message found."
+    
+def get_chatbot_response(prompt):
+    return get_fallback_message(conn)
 
 
 # --- INITIALIZE STATE ---
