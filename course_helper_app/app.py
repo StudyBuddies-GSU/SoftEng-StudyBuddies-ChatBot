@@ -86,7 +86,7 @@ with st.sidebar:
             st.rerun()
     else:
         st.markdown("### Chapters")
-        for i in range(1, 11):
+        for i in [1, 2, 3, 4, 5, 6, 8, 9, 12, 23]:
             if st.button(f"Chapter {i}"):
                 st.session_state.chapter = i
                 st.session_state.card_index = 0
@@ -97,8 +97,7 @@ with st.sidebar:
 
 # --- CHATBOT SCREEN ---
 if st.session_state.screen == "chatbot":
-    st.title("🤖 Course Helper Chatbot")
-    st.caption("Ask questions about the course, syllabus, or deadlines.")
+    st.title("🤓💻 SWE Chatbot")
 
     # Display chat history
     for message in st.session_state.messages:
@@ -106,7 +105,7 @@ if st.session_state.screen == "chatbot":
             st.markdown(message["content"])
 
     # User input
-    if prompt := st.chat_input("Ask me anything..."):
+    if prompt := st.chat_input("Ask me anything about the course, material, or syllabus..."):
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user"):
             st.markdown(prompt)
@@ -135,12 +134,12 @@ if st.session_state.screen == "chatbot":
 else:
     # Title + Mode Switch
     if st.session_state.screen == "flashcards":
-        st.title("📚 Flashcards Mode")
+        st.title("📖 Flashcards Mode")
         if st.button("Switch to Quiz Mode", key="quiz_switch_top"):
             st.session_state.screen = "quiz"
             st.rerun()
     elif st.session_state.screen == "quiz":
-        st.title("🧠 Quiz Mode")
+        st.title("📝 Quiz Mode")
         if st.button("Switch to Flashcards Mode", key="flashcard_switch_top"):
             st.session_state.screen = "flashcards"
             st.rerun()
@@ -216,7 +215,7 @@ else:
             else:
                 st.markdown("&nbsp;", unsafe_allow_html=True)
         with col3:
-            if st.button("➡️ Next"):
+            if st.button("Next ➡️"):
                 st.session_state.card_index = (st.session_state.card_index + 1) % len(flashcards)
                 st.session_state.show_answer = False
                 st.session_state.last_result = None

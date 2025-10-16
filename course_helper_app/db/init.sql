@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS fallbacks (
 
 -- Optional: insert one fallback message
 INSERT INTO fallbacks (fallback_message) VALUES
-('Sorry, I don’t know that yet. Try asking about deadlines or syllabus topics.')
+('I’m sorry, I cannot help you with that. That question falls out of scope with the course material and syllabus. I’m here to help with questions more relevant to your Software Engineering course.')
 ON CONFLICT DO NOTHING;
 
 INSERT INTO flashcards (chapter, question, answer)
