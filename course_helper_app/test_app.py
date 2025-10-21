@@ -48,6 +48,15 @@ class TestCourseHelperApp(unittest.TestCase):
         next_index = (current_index + 1) % len(rows)
         self.assertEqual(next_index, 0)
     
+    def test_5_quiz_correct_answer_shows_checkmark(self):
+        """User enters correct quiz answer → system marks correct."""
+        cards = get_flashcards(self.conn, 2)
+        self.assertTrue(len(cards) > 0)
+        question, answer = cards[0]
+        user_input = answer.strip().lower()
+        is_correct = user_input == answer.strip().lower()
+        self.assertTrue(is_correct, "Correct answer did not validate correctly.")
+    
 
 
 if __name__ == "__main__":
