@@ -33,6 +33,21 @@ class TestCourseHelperApp(unittest.TestCase):
             "i’m sorry, i cannot help you with that",
             fallback.lower()
         )
+    #Emran
+    def test_flashcards_show_question_side(self):
+        rows = get_flashcards(self.conn, chapter=2)
+        self.assertGreater(len(rows), 0, "Expected at least one flashcard in chapter 2")
+        question, answer = rows[0]
+        self.assertIn("?", question)
+
+    # Emran
+    def test_flashcards_loop(self):
+        rows = get_flashcards(self.conn, chapter=1)
+        self.assertGreaterEqual(len(rows), 2, "Expected at least two flashcards in chapter 1")
+        current_index = len(rows) - 1  # last card
+        next_index = (current_index + 1) % len(rows)
+        self.assertEqual(next_index, 0)
+    
 
 
 if __name__ == "__main__":
