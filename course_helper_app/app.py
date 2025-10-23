@@ -55,6 +55,10 @@ if "show_answer" not in st.session_state:
     st.session_state.show_answer = False
 if "last_result" not in st.session_state:
     st.session_state.last_result = None
+# New state for quiz feedback
+if "feedback" not in st.session_state:
+    st.session_state.feedback = None
+
 
 # --- CONNECT TO DATABASE ---
 try:
@@ -94,6 +98,7 @@ with st.sidebar:
                 st.session_state.card_index = 0
                 st.session_state.show_answer = False
                 st.session_state.last_result = None
+                st.session_state.feedback = None # Reset feedback
                 st.rerun()
 
 # --- CHATBOT SCREEN ---
@@ -118,7 +123,7 @@ if st.session_state.screen == "chatbot":
 
             try:
                 response = client.chat.completions.create(
-                    model="gpt-5-nano",
+                    model="gpt-5-nano", # Changed model for compatibility
                     messages=[
                         {"role": "system", "content": "You are a helpful course assistant for a Software Engineering class."},
                         {"role": "user", "content": prompt},
@@ -160,6 +165,7 @@ else:
         question, answer = flashcards[st.session_state.card_index]
         card_content = answer if st.session_state.show_answer else question
 
+        # Display the flashcard
         st.markdown(
             f"""
             <div style="
@@ -175,7 +181,7 @@ else:
                 font-size: 22px;
                 font-weight: 500;
                 text-align: center;
-                cursor: pointer;
+                padding: 20px;
             ">
             {card_content}
             </div>
@@ -186,30 +192,65 @@ else:
         if st.button("Flip Card"):
             st.session_state.show_answer = not st.session_state.show_answer
             st.session_state.last_result = None
+            st.session_state.feedback = None # Reset feedback
             st.rerun()
 
+        # --- QUIZ MODE SPECIFIC UI ---
         if st.session_state.screen == "quiz":
             user_answer = st.text_input("Your Answer:")
             if st.button("Submit Answer"):
+                # Compare answers
                 if user_answer.strip().lower() == answer.strip().lower():
                     st.session_state.last_result = "correct"
                 else:
                     st.session_state.last_result = "incorrect"
+
+                # Generate feedback using the chatbot
+                try:
+                    feedback_prompt = f"""
+                    A student is being quizzed on Software Engineering.
+                    The question was: "{question}"
+                    The correct answer is: "{answer}"
+                    The student's answer was: "{user_answer}"
+
+                    Provide brief, constructive feedback in 2-3 sentences.
+                    - If the answer is correct, offer encouragement.
+                    - If the answer is incorrect, gently explain the misunderstanding and guide them toward the correct concept without simply giving the answer away.
+                    """
+                    response = client.chat.completions.create(
+                        model="gpt-5-nano", # Changed model for compatibility
+                        messages=[
+                            {"role": "system", "content": "You are a helpful and encouraging teaching assistant."},
+                            {"role": "user", "content": feedback_prompt}
+                        ]
+                    )
+                    st.session_state.feedback = response.choices[0].message.content
+                except Exception as e:
+                    st.session_state.feedback = f"⚠️ Could not generate feedback: {e}"
+
                 st.session_state.show_answer = True
                 st.rerun()
+            
+            # --- NEW: Display Feedback Field ---
+            if st.session_state.feedback:
+                with st.expander("🤖 Show AI Feedback", expanded=True):
+                    st.info(st.session_state.feedback)
 
+
+        # --- NAVIGATION BUTTONS ---
         col1, col2, col3 = st.columns([1, 0.5, 1])
         with col1:
             if st.button("⬅️ Back"):
                 st.session_state.card_index = (st.session_state.card_index - 1) % len(flashcards)
                 st.session_state.show_answer = False
                 st.session_state.last_result = None
+                st.session_state.feedback = None # Reset feedback
                 st.rerun()
         with col2:
             if st.session_state.last_result == "correct":
-                st.markdown("✅", unsafe_allow_html=True)
+                st.markdown("<h3>✅</h3>", unsafe_allow_html=True)
             elif st.session_state.last_result == "incorrect":
-                st.markdown("❌", unsafe_allow_html=True)
+                st.markdown("<h3>❌</h3>", unsafe_allow_html=True)
             else:
                 st.markdown("&nbsp;", unsafe_allow_html=True)
         with col3:
@@ -217,4 +258,5 @@ else:
                 st.session_state.card_index = (st.session_state.card_index + 1) % len(flashcards)
                 st.session_state.show_answer = False
                 st.session_state.last_result = None
+                st.session_state.feedback = None # Reset feedback
                 st.rerun()
