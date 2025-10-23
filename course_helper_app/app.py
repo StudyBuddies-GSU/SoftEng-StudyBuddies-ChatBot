@@ -4,10 +4,94 @@ import time
 import os
 from dotenv import load_dotenv
 from openai import OpenAI
+import base64
 
 # --- LOAD ENVIRONMENT VARIABLES ---
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+# --- ADD WOOD BACKGROUND FUNCTION ---
+def add_background(image_file):
+    """
+    Adds a wood background to the Streamlit app using base64 encoding.
+    """
+    with open(image_file, "rb") as f:
+        encoded = base64.b64encode(f.read()).decode()
+
+    page_bg = f"""
+    <style>
+    [data-testid="stAppViewContainer"] {{
+        background-image: url("data:image/png;base64,{encoded}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+    }}
+
+    [data-testid="stHeader"] {{
+        background: rgba(0,0,0,0);
+    }}
+
+    [data-testid="stSidebar"] {{
+        background-color: rgba(255,255,255,0.85);
+        backdrop-filter: blur(6px);
+    }}
+
+    [data-testid="stToolbar"] {{
+        right: 2rem;
+    }}
+    </style>
+    """
+    st.markdown(page_bg, unsafe_allow_html=True)
+
+
+# --- ADD TEXTBOOK FRAME LAYER ---
+def add_textbook_frame(image_file):
+    """
+    Adds a centered textbook frame image on top of the wood background
+    and behind the main content.
+    """
+    with open(image_file, "rb") as f:
+        encoded = base64.b64encode(f.read()).decode()
+
+    frame_html = f"""
+    <style>
+    .textbook-frame {{
+        position: fixed;
+        top: 70%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 80vw;
+        z-index: 0; /* behind Streamlit elements */
+        opacity: 1;
+    }}
+
+    /* Raise Streamlit main content above the frame */
+    [data-testid="stAppViewContainer"] > div:first-child {{
+        position: relative;
+        z-index: 1;
+    }}
+    </style>
+
+    <img class="textbook-frame" src="data:image/png;base64,{encoded}" />
+    """
+    st.markdown(frame_html, unsafe_allow_html=True)
+
+
+# --- APPLY BACKGROUNDS ---
+add_background("assets/wood_background.png")
+add_textbook_frame("assets/textbook_frame.png")
+
+# --- POSITION THE TITLE ---
+st.markdown("""
+<style>
+h1 {
+    position: relative;
+    top: -50px;
+    left: 150px; 
+}
+</style>
+""", unsafe_allow_html=True)
 
 # --- DATABASE CONNECTION ---
 DB_NAME = "coursehelper"
@@ -27,6 +111,7 @@ def init_connection():
         port=DB_PORT,
     )
 
+
 # --- FETCH FUNCTIONS ---
 def get_flashcards(conn, chapter=None):
     with conn.cursor() as cur:
@@ -36,11 +121,17 @@ def get_flashcards(conn, chapter=None):
             cur.execute("SELECT question, answer FROM flashcards;")
         return cur.fetchall()
 
+
 def get_fallback_message(conn):
     with conn.cursor() as cur:
         cur.execute("SELECT fallback_message FROM fallbacks LIMIT 1;")
         result = cur.fetchone()
-        return result[0] if result else "I’m sorry, I cannot help you with that. That question falls out of scope with the course material and syllabus. I’m here to help with questions more relevant to your Software Engineering course."
+        return result[0] if result else (
+            "I’m sorry, I cannot help you with that. "
+            "That question falls out of scope with the course material and syllabus. "
+            "I’m here to help with questions more relevant to your Software Engineering course."
+        )
+
 
 # --- INITIALIZE STATE ---
 if "screen" not in st.session_state:
@@ -55,7 +146,6 @@ if "show_answer" not in st.session_state:
     st.session_state.show_answer = False
 if "last_result" not in st.session_state:
     st.session_state.last_result = None
-# New state for quiz feedback
 if "feedback" not in st.session_state:
     st.session_state.feedback = None
 
@@ -68,6 +158,7 @@ except Exception as e:
     fallback_message = "⚠️ Could not connect to the database."
     st.error(f"Database error: {e}")
     conn = None
+
 
 # --- SIDEBAR ---
 with st.sidebar:
@@ -98,8 +189,9 @@ with st.sidebar:
                 st.session_state.card_index = 0
                 st.session_state.show_answer = False
                 st.session_state.last_result = None
-                st.session_state.feedback = None # Reset feedback
+                st.session_state.feedback = None
                 st.rerun()
+
 
 # --- CHATBOT SCREEN ---
 if st.session_state.screen == "chatbot":
@@ -141,6 +233,7 @@ if st.session_state.screen == "chatbot":
             message_placeholder.markdown(full_response)
 
         st.session_state.messages.append({"role": "assistant", "content": full_response})
+
 
 # --- FLASHCARDS & QUIZ SCREEN ---
 else:
@@ -192,24 +285,24 @@ else:
         if st.button("Flip Card"):
             st.session_state.show_answer = not st.session_state.show_answer
             st.session_state.last_result = None
-            st.session_state.feedback = None # Reset feedback
+            st.session_state.feedback = None
             st.rerun()
 
-        # --- QUIZ MODE SPECIFIC UI ---
+        # --- QUIZ MODE ---
         if st.session_state.screen == "quiz":
             user_answer = st.text_input("Your Answer:")
             if st.button("Submit Answer"):
+                if user_answer.strip().lower() == answer.strip().lower():
+                    st.session_state.last_result = "correct"
+                else:
+                    st.session_state.last_result = "incorrect"
 
-                # Generate feedback using the chatbot
                 try:
                     feedback_prompt = f"""
                     A student is being quizzed on Software Engineering.
                     The question was: "{question}"
                     The correct answer is: "{answer}"
                     The student's answer was: "{user_answer}"
-
-                    Begin your response with "Correct." if the student's answer sufficiently conveys all the same ideas as the correct answer.
-                    Otherwise, begin your response with "Incorrect."
 
                     Provide brief, constructive feedback in 2-3 sentences.
                     - If the answer is correct, offer encouragement.
@@ -223,21 +316,15 @@ else:
                         ]
                     )
                     st.session_state.feedback = response.choices[0].message.content
-                    if "incorrect" in st.session_state.feedback.lower():
-                        st.session_state.last_result = "incorrect"
-                    else:
-                        st.session_state.last_result = "correct"
                 except Exception as e:
                     st.session_state.feedback = f"⚠️ Could not generate feedback: {e}"
 
                 st.session_state.show_answer = True
                 st.rerun()
             
-            # --- NEW: Display Feedback Field ---
             if st.session_state.feedback:
                 with st.expander("🤖 Show AI Feedback", expanded=True):
                     st.info(st.session_state.feedback)
-
 
         # --- NAVIGATION BUTTONS ---
         col1, col2, col3 = st.columns([1, 0.5, 1])
@@ -246,7 +333,7 @@ else:
                 st.session_state.card_index = (st.session_state.card_index - 1) % len(flashcards)
                 st.session_state.show_answer = False
                 st.session_state.last_result = None
-                st.session_state.feedback = None # Reset feedback
+                st.session_state.feedback = None
                 st.rerun()
         with col2:
             if st.session_state.last_result == "correct":
@@ -260,5 +347,5 @@ else:
                 st.session_state.card_index = (st.session_state.card_index + 1) % len(flashcards)
                 st.session_state.show_answer = False
                 st.session_state.last_result = None
-                st.session_state.feedback = None # Reset feedback
+                st.session_state.feedback = None
                 st.rerun()
