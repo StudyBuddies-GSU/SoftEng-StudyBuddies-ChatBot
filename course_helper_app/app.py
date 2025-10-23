@@ -1,6 +1,13 @@
 import streamlit as st
 import psycopg2
 import time
+import os
+from dotenv import load_dotenv
+from openai import OpenAI
+
+# --- LOAD ENVIRONMENT VARIABLES ---
+load_dotenv()
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 # --- DATABASE CONNECTION ---
 DB_NAME = "coursehelper"
@@ -8,7 +15,6 @@ DB_USER = "postgres"
 DB_PASS = "postgres"
 DB_HOST = "db"
 DB_PORT = "5432"
-
 
 @st.cache_resource
 def init_connection():
@@ -21,7 +27,6 @@ def init_connection():
         port=DB_PORT,
     )
 
-
 # --- FETCH FUNCTIONS ---
 def get_flashcards(conn, chapter=None):
     with conn.cursor() as cur:
@@ -31,16 +36,11 @@ def get_flashcards(conn, chapter=None):
             cur.execute("SELECT question, answer FROM flashcards;")
         return cur.fetchall()
 
-
 def get_fallback_message(conn):
     with conn.cursor() as cur:
         cur.execute("SELECT fallback_message FROM fallbacks LIMIT 1;")
         result = cur.fetchone()
-        return result[0] if result else "No fallback message found."
-    
-def get_chatbot_response(prompt):
-    return get_fallback_message(conn)
-
+        return result[0] if result else "I’m sorry, I cannot help you with that. That question falls out of scope with the course material and syllabus. I’m here to help with questions more relevant to your Software Engineering course."
 
 # --- INITIALIZE STATE ---
 if "screen" not in st.session_state:
@@ -64,7 +64,6 @@ except Exception as e:
     fallback_message = "⚠️ Could not connect to the database."
     st.error(f"Database error: {e}")
     conn = None
-
 
 # --- SIDEBAR ---
 with st.sidebar:
@@ -97,7 +96,6 @@ with st.sidebar:
                 st.session_state.last_result = None
                 st.rerun()
 
-
 # --- CHATBOT SCREEN ---
 if st.session_state.screen == "chatbot":
     st.title("🤓💻 SWE Chatbot")
@@ -118,12 +116,19 @@ if st.session_state.screen == "chatbot":
             message_placeholder = st.empty()
             full_response = ""
 
-            if conn and "flashcard" in prompt.lower():
-                flashcards = get_flashcards(conn)
-                assistant_response = f"Found {len(flashcards)} flashcards in database."
-            else:
-                assistant_response = fallback_message
+            try:
+                response = client.chat.completions.create(
+                    model="gpt-5-nano",
+                    messages=[
+                        {"role": "system", "content": "You are a helpful course assistant for a Software Engineering class."},
+                        {"role": "user", "content": prompt},
+                    ],
+                )
+                assistant_response = response.choices[0].message.content
+            except Exception as e:
+                assistant_response = f"⚠️ API error: {e}"
 
+            # Simulate typing animation
             for chunk in assistant_response.split():
                 full_response += chunk + " "
                 time.sleep(0.05)
@@ -132,10 +137,8 @@ if st.session_state.screen == "chatbot":
 
         st.session_state.messages.append({"role": "assistant", "content": full_response})
 
-
 # --- FLASHCARDS & QUIZ SCREEN ---
 else:
-    # Title + Mode Switch
     if st.session_state.screen == "flashcards":
         st.title("📖 Flashcards Mode")
         if st.button("Switch to Quiz Mode", key="quiz_switch_top"):
@@ -147,21 +150,16 @@ else:
             st.session_state.screen = "flashcards"
             st.rerun()
 
-    # Load flashcards
     flashcards = get_flashcards(conn, st.session_state.chapter) if (conn and st.session_state.chapter) else []
 
-    # Show card
     if not st.session_state.chapter:
         st.markdown("### Choose a chapter from the sidebar to begin.")
     elif not flashcards:
         st.warning("No flashcards found for this chapter.")
     else:
         question, answer = flashcards[st.session_state.card_index]
-
-        # Flip logic
         card_content = answer if st.session_state.show_answer else question
 
-        # Card styling
         st.markdown(
             f"""
             <div style="
@@ -185,13 +183,11 @@ else:
             unsafe_allow_html=True,
         )
 
-        # Detect card click
         if st.button("Flip Card"):
             st.session_state.show_answer = not st.session_state.show_answer
             st.session_state.last_result = None
             st.rerun()
 
-        # Quiz input (only in quiz mode)
         if st.session_state.screen == "quiz":
             user_answer = st.text_input("Your Answer:")
             if st.button("Submit Answer"):
@@ -202,7 +198,6 @@ else:
                 st.session_state.show_answer = True
                 st.rerun()
 
-        # Navigation buttons
         col1, col2, col3 = st.columns([1, 0.5, 1])
         with col1:
             if st.button("⬅️ Back"):
