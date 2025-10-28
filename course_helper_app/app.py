@@ -6,17 +6,107 @@ from dotenv import load_dotenv
 from openai import OpenAI
 import base64
 
-# --- LOAD ENVIRONMENT VARIABLES ---
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-# --- ADD WOOD BACKGROUND FUNCTION ---
+
+def set_custom_theme():
+    """
+    Applies custom styles for a vintage, academic, paper-on-wood theme.
+    """
+    # Define a color palette matching the theme
+    primary_color = "#4A4A4A" # Dark text, like ink
+    background_color = "#FCF7E6" # Light cream, aged paper color
+    secondary_background_color = "#E0DAC9" # Slightly darker cream, for input/sidebar
+    text_color = "#4A4A4A"
+
+    st.markdown(
+        f"""
+        <style>
+        /* Global Streamlit Theme Overrides */
+        :root {{
+            --primary-color: {primary_color};
+            --background-color: {background_color};
+            --secondary-background-color: {secondary_background_color};
+            --text-color: {text_color};
+            --font-family: 'Georgia', serif; /* Classic, book-like font */
+        }}
+        
+        /* Apply background to the main view and set text color */
+        [data-testid="stAppViewContainer"] > .main {{
+            color: var(--text-color);
+        }}
+
+        /* Style for the Title */
+        h1 {{
+            color: #3e2723; /* Dark brown for a classic ink look */
+            font-family: 'Times New Roman', serif;
+        }}
+        
+        /* Style for the Sidebar */
+        [data-testid="stSidebar"] {{
+            background-color: rgba(255, 255, 255, 0.9); /* Opaque white/cream sidebar on wood */
+            backdrop-filter: blur(4px);
+            border-right: 3px solid #795548; /* Wood accent border */
+            color: #3e2723;
+        }}
+        
+        /* Chat Messages - Make them look like speech bubbles on paper */
+        [data-testid="stChatMessage"] {{
+            background-color: #FEFBF0; /* Aged paper white/cream */
+            border-radius: 10px;
+            border: 1px solid #C5B9A4; /* Faint border */
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
+        }}
+
+        /* User Message specific styling */
+        .st-emotion-cache-16p7h9p {{
+             background-color: #FEFBF0 !important; /* Force paper color for message bubble */
+        }}
+
+        /* Text Input */
+        [data-testid="stTextInput"] > div > div {{
+            background-color: #FFFFFF; /* Clean white input field */
+            border-radius: 8px;
+        }}
+        
+        /* Buttons - A muted, academic look */
+        .stButton>button {{
+            border: 2px solid #795548; /* Darker border */
+            border-radius: 5px;
+            background-color: #E0DAC9; /* Muted background */
+            color: #3e2723;
+            font-weight: bold;
+        }}
+        .stButton>button:hover {{
+            background-color: #C5B9A4;
+            color: #000000;
+        }}
+        
+        /* Flashcard Styling Overrides */
+        .flashcard-custom {{
+             background-color: #FEFBF0 !important;
+             border: 3px solid #795548 !important; /* Stronger border to define the card */
+             box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2) !important;
+             color: #3e2723;
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
 def add_background(image_file):
     """
     Adds a wood background to the Streamlit app using base64 encoding.
     """
-    with open(image_file, "rb") as f:
-        encoded = base64.b64encode(f.read()).decode()
+    try:
+        with open(image_file, "rb") as f:
+            encoded = base64.b64encode(f.read()).decode()
+    except FileNotFoundError:
+        st.error(f"Error: Background image file not found at {image_file}")
+        return
 
     page_bg = f"""
     <style>
@@ -28,13 +118,9 @@ def add_background(image_file):
         background-attachment: fixed;
     }}
 
+    /* Ensure header remains invisible */
     [data-testid="stHeader"] {{
         background: rgba(0,0,0,0);
-    }}
-
-    [data-testid="stSidebar"] {{
-        background-color: rgba(255,255,255,0.85);
-        backdrop-filter: blur(6px);
     }}
 
     [data-testid="stToolbar"] {{
@@ -44,24 +130,26 @@ def add_background(image_file):
     """
     st.markdown(page_bg, unsafe_allow_html=True)
 
-
-# --- ADD TEXTBOOK FRAME LAYER ---
 def add_textbook_frame(image_file):
     """
     Adds a centered textbook frame image on top of the wood background
     and behind the main content.
     """
-    with open(image_file, "rb") as f:
-        encoded = base64.b64encode(f.read()).decode()
+    try:
+        with open(image_file, "rb") as f:
+            encoded = base64.b64encode(f.read()).decode()
+    except FileNotFoundError:
+        st.warning(f"Textbook frame image not found at {image_file}")
+        return
 
     frame_html = f"""
     <style>
     .textbook-frame {{
         position: fixed;
-        top: 70%;
+        top: 70%; /* Original: 70% */
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 80vw;
+        width: 80vw; /* Original: 80vw */
         z-index: 0; /* behind Streamlit elements */
         opacity: 1;
     }}
@@ -77,23 +165,21 @@ def add_textbook_frame(image_file):
     """
     st.markdown(frame_html, unsafe_allow_html=True)
 
-
-# --- APPLY BACKGROUNDS ---
+set_custom_theme()
 add_background("assets/wood_background.png")
 add_textbook_frame("assets/textbook_frame.png")
 
-# --- POSITION THE TITLE ---
+
 st.markdown("""
 <style>
 h1 {
     position: relative;
     top: -50px;
-    left: 150px; 
+    left: 150px;
 }
 </style>
 """, unsafe_allow_html=True)
 
-# --- DATABASE CONNECTION ---
 DB_NAME = "coursehelper"
 DB_USER = "postgres"
 DB_PASS = "postgres"
@@ -111,8 +197,6 @@ def init_connection():
         port=DB_PORT,
     )
 
-
-# --- FETCH FUNCTIONS ---
 def get_flashcards(conn, chapter=None):
     with conn.cursor() as cur:
         if chapter:
@@ -132,8 +216,6 @@ def get_fallback_message(conn):
             "I’m here to help with questions more relevant to your Software Engineering course."
         )
 
-
-# --- INITIALIZE STATE ---
 if "screen" not in st.session_state:
     st.session_state.screen = "chatbot"  # chatbot, flashcards, quiz
 if "messages" not in st.session_state:
@@ -149,8 +231,6 @@ if "last_result" not in st.session_state:
 if "feedback" not in st.session_state:
     st.session_state.feedback = None
 
-
-# --- CONNECT TO DATABASE ---
 try:
     conn = init_connection()
     fallback_message = get_fallback_message(conn)
@@ -159,26 +239,23 @@ except Exception as e:
     st.error(f"Database error: {e}")
     conn = None
 
-
-# --- SIDEBAR ---
 with st.sidebar:
     st.header("Controls")
 
     # Switch screen button
     if st.session_state.screen == "chatbot":
-        if st.button("Flashcards Mode"):
+        if st.button("Flashcards Mode 📖"):
             st.session_state.screen = "flashcards"
             st.rerun()
     else:
-        if st.button("Chatbot Mode"):
+        if st.button("Chatbot Mode 🤓"):
             st.session_state.screen = "chatbot"
             st.rerun()
 
     st.markdown("---")
 
-    # Sidebar content below divider
     if st.session_state.screen == "chatbot":
-        if st.button("Clear Chat History"):
+        if st.button("Clear Chat History 🗑️"):
             st.session_state.messages = []
             st.rerun()
     else:
@@ -192,8 +269,6 @@ with st.sidebar:
                 st.session_state.feedback = None
                 st.rerun()
 
-
-# --- CHATBOT SCREEN ---
 if st.session_state.screen == "chatbot":
     st.title("🤓💻 SWE Chatbot")
 
@@ -208,7 +283,6 @@ if st.session_state.screen == "chatbot":
         with st.chat_message("user"):
             st.markdown(prompt)
 
-        # Generate assistant response
         with st.chat_message("assistant"):
             message_placeholder = st.empty()
             full_response = ""
@@ -225,7 +299,6 @@ if st.session_state.screen == "chatbot":
             except Exception as e:
                 assistant_response = f"⚠️ API error: {e}"
 
-            # Simulate typing animation
             for chunk in assistant_response.split():
                 full_response += chunk + " "
                 time.sleep(0.05)
@@ -234,17 +307,15 @@ if st.session_state.screen == "chatbot":
 
         st.session_state.messages.append({"role": "assistant", "content": full_response})
 
-
-# --- FLASHCARDS & QUIZ SCREEN ---
 else:
     if st.session_state.screen == "flashcards":
         st.title("📖 Flashcards Mode")
-        if st.button("Switch to Quiz Mode", key="quiz_switch_top"):
+        if st.button("Switch to Quiz Mode 📝", key="quiz_switch_top"):
             st.session_state.screen = "quiz"
             st.rerun()
     elif st.session_state.screen == "quiz":
         st.title("📝 Quiz Mode")
-        if st.button("Switch to Flashcards Mode", key="flashcard_switch_top"):
+        if st.button("Switch to Flashcards Mode 📖", key="flashcard_switch_top"):
             st.session_state.screen = "flashcards"
             st.rerun()
 
@@ -258,19 +329,16 @@ else:
         question, answer = flashcards[st.session_state.card_index]
         card_content = answer if st.session_state.show_answer else question
 
-        # Display the flashcard
         st.markdown(
             f"""
-            <div style="
+            <div class="flashcard-custom" style="
                 width: 500px;
                 height: 300px;
-                margin: auto;
+                margin: 20px auto;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 border-radius: 12px;
-                border: 2px solid #ccc;
-                background-color: #f9f9f9;
                 font-size: 22px;
                 font-weight: 500;
                 text-align: center;
@@ -282,21 +350,22 @@ else:
             unsafe_allow_html=True,
         )
 
-        if st.button("Flip Card"):
-            st.session_state.show_answer = not st.session_state.show_answer
-            st.session_state.last_result = None
-            st.session_state.feedback = None
-            st.rerun()
-
-        # --- QUIZ MODE ---
+        if st.session_state.screen == "flashcards":
+            col_flip, _, _ = st.columns([1, 1, 1])
+            with col_flip:
+                if st.button("Flip Card 🔄"):
+                    st.session_state.show_answer = not st.session_state.show_answer
+                    st.session_state.last_result = None
+                    st.session_state.feedback = None
+                    st.rerun()
+        
         if st.session_state.screen == "quiz":
             user_answer = st.text_input("Your Answer:")
-            if st.button("Submit Answer"):
+            if st.button("Submit Answer ✅"):
                 if user_answer.strip().lower() == answer.strip().lower():
                     st.session_state.last_result = "correct"
                 else:
                     st.session_state.last_result = "incorrect"
-
                 try:
                     feedback_prompt = f"""
                     A student is being quizzed on Software Engineering.
@@ -321,12 +390,12 @@ else:
 
                 st.session_state.show_answer = True
                 st.rerun()
-            
+          
             if st.session_state.feedback:
                 with st.expander("🤖 Show AI Feedback", expanded=True):
                     st.info(st.session_state.feedback)
-
-        # --- NAVIGATION BUTTONS ---
+                    
+        st.markdown("---")
         col1, col2, col3 = st.columns([1, 0.5, 1])
         with col1:
             if st.button("⬅️ Back"):
@@ -337,9 +406,9 @@ else:
                 st.rerun()
         with col2:
             if st.session_state.last_result == "correct":
-                st.markdown("<h3>✅</h3>", unsafe_allow_html=True)
+                st.markdown("<h3 style='text-align:center;'>✅</h3>", unsafe_allow_html=True)
             elif st.session_state.last_result == "incorrect":
-                st.markdown("<h3>❌</h3>", unsafe_allow_html=True)
+                st.markdown("<h3 style='text-align:center;'>❌</h3>", unsafe_allow_html=True)
             else:
                 st.markdown("&nbsp;", unsafe_allow_html=True)
         with col3:
