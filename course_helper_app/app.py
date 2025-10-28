@@ -528,43 +528,45 @@ else:
 
 
        if st.session_state.screen == "quiz":
-           user_answer = st.text_input("Your Answer:")
-           if st.button("Submit Answer ✅"):
-               if user_answer.strip().lower() == answer.strip().lower():
-                   st.session_state.last_result = "correct"
-               else:
-                   st.session_state.last_result = "incorrect"
+            user_answer = st.text_input("Your Answer:")
+            if st.button("Submit Answer"):
+
+                # Generate feedback using the chatbot
+                try:
+                    feedback_prompt = f"""
+                    A student is being quizzed on Software Engineering.
+                    The question was: "{question}"
+                    The correct answer is: "{answer}"
+                    The student's answer was: "{user_answer}"
+
+                    Begin your response with "Correct." if the student's answer sufficiently conveys all the same ideas as the correct answer.
+                    Otherwise, begin your response with "Incorrect."
+
+                    Provide brief, constructive feedback in 2-3 sentences.
+                    - If the answer is correct, offer encouragement.
+                    - If the answer is incorrect, gently explain the misunderstanding and guide them toward the correct concept without simply giving the answer away.
+                    """
+                    response = client.chat.completions.create(
+                        model="gpt-5-nano",
+                        messages=[
+                            {"role": "system", "content": "You are a helpful and encouraging teaching assistant."},
+                            {"role": "user", "content": feedback_prompt}
+                        ]
+                    )
+                    st.session_state.feedback = response.choices[0].message.content
+                    if "incorrect" in st.session_state.feedback.lower():
+                        st.session_state.last_result = "incorrect"
+                    else:
+                        st.session_state.last_result = "correct"
+                except Exception as e:
+                    st.session_state.feedback = f"⚠️ Could not generate feedback: {e}"
 
 
-               try:
-                   feedback_prompt = f"""
-                   A student is being quizzed on Software Engineering.
-                   The question was: "{question}"
-                   The correct answer is: "{answer}"
-                   The student's answer was: "{user_answer}"
+                st.session_state.show_answer = True
+                st.rerun()
 
 
-                   Provide brief, constructive feedback in 2-3 sentences.
-                   - If the answer is correct, offer encouragement.
-                   - If the answer is incorrect, gently explain the misunderstanding and guide them toward the correct concept without simply giving the answer away.
-                   """
-                   response = client.chat.completions.create(
-                       model="gpt-5-nano",
-                       messages=[
-                           {"role": "system", "content": "You are a helpful and encouraging teaching assistant."},
-                           {"role": "user", "content": feedback_prompt}
-                       ]
-                   )
-                   st.session_state.feedback = response.choices[0].message.content
-               except Exception as e:
-                   st.session_state.feedback = f"⚠️ Could not generate feedback: {e}"
-
-
-               st.session_state.show_answer = True
-               st.rerun()
-
-
-           if st.session_state.feedback:
+            if st.session_state.feedback:
                with st.expander("🤖 Show AI Feedback", expanded=True):
                    st.info(st.session_state.feedback)
 
