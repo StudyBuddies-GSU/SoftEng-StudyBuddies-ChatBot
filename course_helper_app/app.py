@@ -15,16 +15,10 @@ try:
 except Exception:  # pragma: no cover - macOS/Windows fallbacks
     ZoneInfo = None
 
-
-# --- Emran: Environment & OpenAI client setup ---
-# Centralized loading of environment variables and OpenAI client configuration.
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-
-# --- Emran: Timezone helpers (for consistent timestamps in UI) ---
 TZ_NAME = "America/New_York"
-
 
 def get_tz():
     if ZoneInfo is None:
@@ -34,15 +28,12 @@ def get_tz():
     except Exception:
         return None
 
-
 APP_TZ = get_tz()
-
 
 def now_in_app_tz() -> datetime:
     if APP_TZ:
         return datetime.now(APP_TZ)
     return datetime.now()
-
 
 def format_ts(dt: datetime) -> str:
     """Format datetime to 'H:MM AM/PM' cross-platform."""
@@ -51,8 +42,6 @@ def format_ts(dt: datetime) -> str:
     except Exception:
         return dt.strftime("%#I:%M %p")
 
-
-# --- THEME & STYLING ---
 def set_custom_theme():
     primary_color = "#4A4A4A"
     background_color = "#FCF7E6"
@@ -114,7 +103,6 @@ def set_custom_theme():
         unsafe_allow_html=True,
     )
 
-
 def add_background(image_file: str):
     try:
         with open(image_file, "rb") as f:
@@ -137,7 +125,6 @@ def add_background(image_file: str):
     </style>
     """
     st.markdown(page_bg, unsafe_allow_html=True)
-
 
 def add_textbook_frame(image_file: str):
     try:
@@ -167,7 +154,6 @@ def add_textbook_frame(image_file: str):
     <img class="textbook-frame" src="data:image/png;base64,{encoded}" />
     """
     st.markdown(frame_html, unsafe_allow_html=True)
-
 
 def inject_chat_styles():
     st.markdown(
@@ -230,20 +216,16 @@ def inject_chat_styles():
         unsafe_allow_html=True,
     )
 
-
 set_custom_theme()
 add_background("assets/wood_background.png")
 add_textbook_frame("assets/textbook_frame.png")
 inject_chat_styles()
 
-
-# --- Emran: Database config (for Postgres-backed flashcards/fallbacks) ---
 DB_NAME = "coursehelper"
 DB_USER = "postgres"
 DB_PASS = "postgres"
 DB_HOST = "db"
 DB_PORT = "5432"
-
 
 @st.cache_resource(show_spinner=False)
 def init_connection():
@@ -255,7 +237,6 @@ def init_connection():
         port=DB_PORT,
     )
 
-
 def get_flashcards(conn, chapter=None):
     with conn.cursor() as cur:
         if chapter:
@@ -263,7 +244,6 @@ def get_flashcards(conn, chapter=None):
         else:
             cur.execute("SELECT question, answer FROM flashcards;")
         return cur.fetchall()
-
 
 def get_fallback_message(conn):
     with conn.cursor() as cur:
@@ -274,7 +254,6 @@ def get_fallback_message(conn):
             "That question falls out of scope with the course material and syllabus. "
             "I’m here to help with questions more relevant to your Software Engineering course."
         )
-
 
 def get_chapter_ids(conn) -> List[int]:
     default_chapters = [1, 2, 3, 4, 5, 6, 8, 9, 12, 23]
@@ -288,10 +267,8 @@ def get_chapter_ids(conn) -> List[int]:
     except Exception:
         return default_chapters
 
-
-# --- Emran: Session state setup for multi-screen app ---
 if "screen" not in st.session_state:
-    st.session_state.screen = "chatbot"  # chatbot, flashcards, quiz
+    st.session_state.screen = "chatbot"
 if "messages" not in st.session_state:
     st.session_state.messages = []
 if "chapter" not in st.session_state:
@@ -305,15 +282,12 @@ if "last_result" not in st.session_state:
 if "feedback" not in st.session_state:
     st.session_state.feedback = None
 
-
 def reset_learning_state():
     st.session_state.card_index = 0
     st.session_state.show_answer = False
     st.session_state.last_result = None
     st.session_state.feedback = None
 
-
-# --- CONNECT TO DATABASE ---
 try:
     conn = init_connection()
     fallback_message = get_fallback_message(conn)
@@ -322,8 +296,6 @@ except Exception as e:
     st.error(f"Database error: {e}")
     conn = None
 
-
-# --- CHAT RENDERING ---
 def render_bubble(role: str, text: str, ts_iso: Optional[str] = None):
     """Render a chat bubble with timestamp below."""
     if ts_iso:
@@ -360,8 +332,6 @@ def render_bubble(role: str, text: str, ts_iso: Optional[str] = None):
         unsafe_allow_html=True,
     )
 
-
-# --- SIDEBAR ---
 with st.sidebar:
     st.header("StudyBuddies")
 
@@ -397,8 +367,6 @@ with st.sidebar:
                 reset_learning_state()
                 st.rerun()
 
-
-# --- MAIN LAYOUT ---
 if st.session_state.screen == "chatbot":
     st.title("🤓💻 SWE Chatbot")
 
