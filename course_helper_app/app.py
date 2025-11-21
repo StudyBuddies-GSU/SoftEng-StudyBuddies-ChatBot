@@ -407,7 +407,7 @@ if st.session_state.screen == "chatbot":
                 messages=[
                     {
                         "role": "system",
-                        "content": "You are a helpful course assistant for a Software Engineering class.",
+                        "content": "You are a helpful course assistant for a Software Engineering class. Do not exceed 6 sentences for your answer",
                     },
                     {"role": "user", "content": prompt},
                 ],
