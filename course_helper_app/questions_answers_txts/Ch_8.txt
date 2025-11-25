@@ -1,0 +1,62 @@
+Question - Answer
+What is software evolution? - The process of changing software after delivery to meet new requirements.
+Why is software evolution necessary? - Business environments and user needs change over time.
+What is the main goal of software evolution? - To maintain and extend software usefulness and value.
+What is software maintenance? - Modifying a delivered system to correct faults or adapt it.
+What is the difference between evolution and maintenance? - Evolution focuses on growth; maintenance focuses on correction.
+What are the types of maintenance? - Corrective, adaptive, perfective, and preventive.
+What is corrective maintenance? - Fixing defects discovered after delivery.
+What is adaptive maintenance? - Modifying software to adapt to new environments.
+What is perfective maintenance? - Improving performance or maintainability.
+What is preventive maintenance? - Updating software to prevent future issues.
+What is a legacy system? - An old system still in use despite outdated technology.
+Why are legacy systems difficult to maintain? - Poor documentation, aging technology, and complex dependencies.
+What is reverse engineering? - Analyzing code to understand its design or functionality.
+What is software re-engineering? - Restructuring or rewriting existing software to improve it.
+What is code refactoring? - Reorganizing code to improve readability and maintainability.
+What is the main benefit of re-engineering? - Improves system quality without full redevelopment.
+What is software reuse? - Using existing components or systems in new applications.
+What is impact analysis? - Assessing the effects of proposed software changes.
+What is regression testing in evolution? - Ensuring changes don’t introduce new faults.
+What is change management? - Controlling how software changes are proposed and implemented.
+What are evolution processes? - Activities involved in making and validating software changes.
+What is the main challenge of software evolution? - Balancing change with stability and reliability.
+What is Lehman’s first law? - Software must be continually adapted or it becomes less useful.
+What is Lehman’s second law? - As software evolves, complexity increases unless managed.
+What is Lehman’s third law? - Self-regulation — system evolution is a self-regulating process.
+What is Lehman’s fourth law? - Conservation of organizational stability — the rate of evolution is stable.
+What is Lehman’s fifth law? - Conservation of familiarity — growth should preserve user understanding.
+What is Lehman’s sixth law? - Continuing growth — functionality must increase over time.
+What is Lehman’s seventh law? - Declining quality unless maintained.
+What is Lehman’s eighth law? - Feedback systems drive evolution.
+What are legacy system components? - Business processes, system software, application software, and data.
+What is the role of legacy data? - Contains critical business information that must be preserved.
+What is legacy system migration? - Moving data or functionality to a new platform.
+What are the steps in migration? - Analysis, restructuring, testing, and deployment.
+What is encapsulation in evolution? - Wrapping legacy components with interfaces for reuse.
+What is software aging? - The gradual decline of software quality over time.
+What causes software aging? - Repeated modifications, patches, and complexity growth.
+What is a replacement system? - A new system developed to replace an outdated legacy system.
+What is the risk of system replacement? - High cost and potential disruption.
+What is system wrapping? - Creating an interface to connect old components with new ones.
+What is data migration? - Transferring data from old systems to modern databases.
+What is re-hosting? - Running old software on new hardware without major changes.
+What is re-engineering tool support? - Automated tools that assist in analyzing and restructuring code.
+What is restructuring? - Reorganizing code without changing its behavior.
+What is modularization? - Dividing a system into independent modules for easier updates.
+What is a maintenance process model? - A structured approach to planning and managing maintenance activities.
+What is software configuration management? - Tracking and controlling software changes.
+What is the main objective of maintenance planning? - To prepare resources and procedures for handling post-delivery issues.
+What is maintainability? - The ease with which software can be changed.
+What is a maintenance request? - A report of an issue or enhancement proposal.
+What is software evolution planning? - Estimating and scheduling future changes.
+What is continuous evolution? - Regularly updating software to meet ongoing needs.
+What is software product line evolution? - Managing evolution across a family of related systems.
+What is software evolution cost? - The total effort and resources required to modify the system.
+Why is maintenance costly? - Complexity, dependencies, and lack of automated testing.
+What is process maturity in maintenance? - The degree to which maintenance processes are defined and optimized.
+What is system dependability in evolution? - Ensuring updates do not compromise reliability.
+What is software evolution management? - Coordinating changes, testing, and deployment for evolving systems.
+What is the role of documentation in evolution? - Helps understand and safely modify existing systems.
+What is an evolutionary development model? - A model where systems are developed and improved iteratively.
+What is the ultimate goal of evolution? - Sustain system value while adapting to new requirements.

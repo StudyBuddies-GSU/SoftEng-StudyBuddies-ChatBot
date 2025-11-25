@@ -1,0 +1,61 @@
+Question - Answer
+What is requirements engineering? - The process of finding, documenting, and managing the services and constraints of a system.
+What is a stakeholder? - Any person or organization with an interest in the system.
+What are user requirements? - Informal statements of services and constraints written for end users.
+What are system requirements? - Detailed, technical descriptions intended for developers.
+What is requirements elicitation? - The activity of discovering requirements from stakeholders.
+What is requirements analysis? - Refining and modeling elicited requirements to resolve conflicts and ambiguity.
+What is requirements specification? - Writing down user and system requirements in a requirements document.
+What is requirements validation? - Checking that requirements accurately reflect stakeholder needs.
+What is requirements management? - Controlling changes to requirements throughout the project.
+Why are scenarios useful? - They show how the system may be used in realistic situations.
+What is a user story? - A short statement of desired functionality from a user's perspective.
+Give the common user story template. - As a (user type) I want (action) so that (reason).
+What is a use case? - A description of interactions between actors and the system to achieve a goal.
+What does a sequence diagram show? - The order of interactions between system objects over time.
+What is ethnography in requirements elicitation? - Observing users in their real environment to capture actual practices.
+When is ethnography most effective? - To understand existing, complex work practices and social factors.
+What is prototyping for requirements? - Building a quick model to explore requirements and get feedback.
+What is a throw-away prototype? - A prototype used to explore ideas and discarded afterwards.
+What is the risk of using prototypes as the final product? - They often lack quality and may not meet non-functional requirements.
+What is an interview in elicitation? - A formal or informal conversation with stakeholders to collect requirements.
+What is a closed interview? - An interview with pre-determined questions.
+What is an open interview? - An interview where stakeholders discuss issues freely to surface needs.
+What is a questionnaire used for? - Collecting information from many stakeholders efficiently.
+What are workshops used for in elicitation? - Collaborative sessions to gather requirements and build consensus.
+What is requirements traceability? - Linking requirements to their origins and related artifacts.
+Why use traceability? - To estimate impact of changes and ensure coverage through development.
+What is a requirements baseline? - A formally agreed set of requirements that is controlled and versioned.
+What is configuration management for requirements? - Managing versions and changes of requirements artifacts.
+What does "shall" indicate in a specification? - A mandatory requirement.
+What does "should" indicate in a specification? - A desirable but not mandatory requirement.
+Why avoid jargon in user requirements? - So non-technical stakeholders can understand and validate them.
+What is a functional requirement? - A statement of services the system must perform.
+What is a non-functional requirement? - A constraint on system operation like performance or security.
+Give an example of a non-functional requirement. - The system shall respond to queries within 2 seconds.
+What is ambiguity in requirements? - When a requirement can be interpreted in multiple ways.
+What is consistency in requirements? - Requirements do not conflict with each other.
+What is completeness in requirements? - All necessary requirements and details are included.
+What is verifiability of a requirement? - It can be checked through inspection or test.
+What is priorization of requirements? - Ranking requirements by importance or business value.
+What is requirements negotiation? - Resolving stakeholder conflicts to agree on feasible requirements.
+What is domain modeling? - Representing key entities and relationships in the problem domain.
+What is a requirements attribute? - Metadata such as priority, owner, status, and rationale.
+What is the purpose of acceptance criteria? - To define conditions under which a requirement is satisfied.
+What is a SRS? - A Software Requirements Specification document capturing system requirements.
+Why include rationale in requirements? - To explain why a requirement exists and aid future decisions.
+What is requirements validation by inspection? - Reviewing requirements with stakeholders to check correctness.
+What is requirements validation by prototyping? - Using a prototype to validate that requirements meet user needs.
+What is requirements validation by testing? - Deriving tests from requirements to confirm behavior.
+What is a requirements change request? - A formal proposal to modify a baseline requirement.
+What is impact analysis for a change? - Assessing how a proposed requirement change affects the system and costs.
+What is requirements scoping? - Defining the boundaries and major functions of the system.
+What is requirements partitioning? - Breaking requirements into manageable sub-areas or modules.
+What is a formal specification? - A mathematically precise specification notation for unambiguous requirements.
+Why are formal specifications rarely used for user requirements? - Most customers cannot read or validate formal notations.
+What is structured natural language for specs? - Using a template or form to make natural-language requirements consistent.
+What are graphical notations used for? - Visually modeling functional requirements (e.g., UML use cases).
+What should a good requirement sentence express? - One clear, testable idea.
+What is requirements volatility? - The degree to which requirements change over time.
+How can prototyping reduce requirements risk? - By revealing misunderstandings early through demonstrations.
+What is the purpose of requirements validation? - To ensure the documented requirements meet stakeholder needs.

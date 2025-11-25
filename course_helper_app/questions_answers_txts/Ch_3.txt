@@ -1,0 +1,65 @@
+Question - Answer
+What is a software process? - A structured set of activities required to develop a software system.
+What are the four basic software process activities? - Specification, development, validation, and evolution.
+What is software specification? - Defining what the system should do and its constraints.
+What is software development? - The process of designing and implementing software.
+What is software validation? - Checking that the system meets customer requirements.
+What is software evolution? - Modifying software to meet new requirements.
+What are software process models? - Abstract representations of a software process.
+Name three generic software process models. - Waterfall, incremental development, and reuse-oriented.
+What is the waterfall model? - A plan-driven model with separate and sequential phases.
+What are the main phases of the waterfall model? - Requirements, design, implementation, testing, and maintenance.
+What is a key disadvantage of the waterfall model? - Difficulty accommodating changing requirements.
+What is incremental development? - Developing the system in increments, each delivering part of the functionality.
+What are the advantages of incremental development? - Flexibility, faster delivery, and easier risk management.
+What is reuse-oriented software engineering? - Building systems by configuring existing components or systems.
+What is a process activity? - A set of related actions contributing to software development.
+What is a software specification document? - A formal description of the system’s functions and constraints.
+What are functional requirements? - Statements of services the system should provide.
+What are non-functional requirements? - Constraints on the system’s services, such as speed or security.
+What is the role of project management in software processes? - Planning, coordinating, and monitoring the software process.
+What is process iteration? - Repeating process activities as software evolves.
+What is prototyping? - Creating an early version of a system to understand requirements.
+What is process improvement? - Changing processes to improve product quality or reduce costs.
+What is a software process model used for? - To describe, analyze, and improve software processes.
+What is an agile process model? - A lightweight, iterative approach emphasizing flexibility and collaboration.
+What is a plan-driven process? - A process with detailed upfront planning and documentation.
+What are the two key process dimensions? - The development phase and the process model used.
+What is process visibility? - The extent to which progress and status can be monitored.
+What is process maturity? - A measure of how well a process is defined, managed, and improved.
+What is process standardization? - Using defined procedures across multiple projects.
+What is software quality assurance? - Activities ensuring that the process and product meet quality standards.
+What are CASE tools? - Computer-Aided Software Engineering tools supporting process activities.
+What are milestones in software processes? - Points marking completion of key tasks.
+What is a deliverable in software processes? - A document or artifact produced during the process.
+What is process documentation? - Written records of process activities, outcomes, and decisions.
+What are examples of software process models? - Waterfall, V-model, spiral, and agile.
+What is the V-model? - An extension of the waterfall model emphasizing testing at each stage.
+What is the spiral model? - A risk-driven model combining iterative development and risk analysis.
+What is process tailoring? - Adapting a process model to fit a specific project or organization.
+What is process monitoring? - Tracking the performance of process activities.
+What is process automation? - Using software tools to support or perform process tasks.
+What is process improvement measurement? - Using metrics to evaluate process performance and outcomes.
+What are software process metrics? - Quantitative measures such as effort, time, or defects.
+What is software reuse? - Using existing software components in new applications.
+What is the main benefit of reuse-oriented development? - Reduces cost and development time.
+What is configuration management? - Managing changes to software artifacts systematically.
+What is version control? - Tracking and managing changes to software source code.
+What is continuous integration? - Frequently merging code changes into a shared repository.
+What is the goal of process improvement? - To enhance product quality and process efficiency.
+What is risk management in software processes? - Identifying, analyzing, and mitigating risks.
+What is process modeling? - Representing the steps and structure of a software process.
+What is process analysis? - Studying current processes to identify weaknesses.
+What is process re-engineering? - Redesigning processes to achieve major performance improvements.
+What are the roles in software processes? - Developers, managers, testers, and stakeholders.
+What are validation activities? - Reviews, inspections, and testing.
+What is the importance of validation? - Ensures the system meets user expectations.
+What is software maintenance? - Updating and improving a system after delivery.
+What is process optimization? - Refining processes for maximum efficiency and quality.
+What are process inputs? - Requirements, resources, and tools.
+What are process outputs? - Working software, documentation, and reports.
+What is traceability in processes? - The ability to link artifacts across process stages.
+What is defect prevention? - Taking steps to avoid errors early in development.
+What is defect detection? - Finding and fixing errors through testing or reviews.
+What is change management? - Controlling how modifications are introduced into software.
+Why are software processes important? - They provide structure, predictability, and repeatability in development.

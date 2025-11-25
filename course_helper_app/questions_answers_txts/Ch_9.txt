@@ -1,0 +1,63 @@
+Question - Answer
+What is software testing? - The process of executing a program to find errors and ensure it meets requirements.
+What is the goal of software testing? - To reveal defects and increase confidence in the software’s reliability.
+What is verification in software engineering? - Ensuring the software meets its specification.
+What is validation in software engineering? - Ensuring the software fulfills user needs and expectations.
+What is the difference between verification and validation? - Verification checks the product is built right; validation checks the right product is built.
+What is a defect? - A fault in the software that may cause incorrect behavior.
+What is a failure? - The manifestation of a defect during execution.
+What is a test case? - A set of inputs and expected outputs for testing a specific condition.
+What is test data? - The data used to execute test cases.
+What is test planning? - Defining the objectives, scope, approach, and resources for testing.
+What is a test suite? - A collection of test cases designed to test a program.
+What is test execution? - Running the software using selected test cases.
+What is test evaluation? - Assessing results to determine if the software behaves as expected.
+What are the two main testing strategies? - Validation testing and defect testing.
+What is defect testing? - Testing designed to expose faults in a system.
+What is validation testing? - Testing to ensure the system meets user needs.
+What are the main stages of testing? - Component, integration, and system testing.
+What is component testing? - Testing individual modules or units of code.
+What is integration testing? - Testing combined modules to verify their interaction.
+What is system testing? - Testing the complete system to ensure it meets requirements.
+What is acceptance testing? - Testing performed by customers to decide whether to accept the system.
+What is alpha testing? - Testing performed internally before release to users.
+What is beta testing? - Testing performed by real users in their environment before full release.
+What is regression testing? - Testing to ensure changes have not introduced new defects.
+What is performance testing? - Evaluating speed, responsiveness, and stability under load.
+What is stress testing? - Testing the system under extreme conditions.
+What is usability testing? - Assessing how easily users can interact with the system.
+What is black-box testing? - Testing based on inputs and outputs without seeing internal code.
+What is white-box testing? - Testing based on internal structure or code logic.
+What is gray-box testing? - Combines aspects of both black-box and white-box testing.
+What is path testing? - Ensuring all possible execution paths in a program are tested.
+What is boundary testing? - Testing at the limits of input ranges.
+What is equivalence partitioning? - Dividing input data into valid and invalid partitions to reduce test cases.
+What is a test oracle? - The source of expected results for test cases.
+What is automated testing? - Using software tools to execute tests automatically.
+What is manual testing? - Human testers manually execute test cases.
+What are unit tests? - Tests that check the smallest pieces of code, like functions or classes.
+What are integration tests? - Tests that verify modules work together as expected.
+What are system tests? - Tests of the whole integrated system against requirements.
+What is test-driven development (TDD)? - Writing tests before writing the corresponding code.
+What are the benefits of TDD? - Encourages cleaner design and reduces bugs early.
+What is a stub in testing? - A dummy module simulating a lower-level component.
+What is a driver in testing? - A module simulating a higher-level component that calls the code under test.
+What is coverage testing? - Measuring how much of the code is executed by tests.
+What is statement coverage? - The percentage of executable statements tested.
+What is branch coverage? - The percentage of decision branches executed.
+What is condition coverage? - The percentage of Boolean sub-expressions evaluated both true and false.
+What is fault seeding? - Intentionally inserting errors to measure test effectiveness.
+What is test coverage? - The proportion of software features or code exercised by tests.
+What is exploratory testing? - Simultaneously designing and executing tests based on intuition and experience.
+What is automated regression testing? - Re-running automated test cases to confirm previous functionality works.
+What is non-functional testing? - Testing system attributes like performance, security, and usability.
+What is functional testing? - Testing specific behaviors or functions of the software.
+What is acceptance criteria? - Conditions the software must meet for acceptance by the client.
+What is test maintenance? - Updating tests as software evolves.
+What are the challenges in software testing? - Time constraints, incomplete requirements, and environment limitations.
+What is a defect report? - A document describing a found defect and its impact.
+What is a test environment? - The hardware and software setup used for testing.
+What is test prioritization? - Selecting and ordering tests based on risk and importance.
+What is the main objective of testing? - To find defects and ensure the software performs as intended.
+What is quality assurance (QA)? - The process ensuring quality throughout the software lifecycle.
+What is debugging? - The process of locating and fixing software defects found during testing.

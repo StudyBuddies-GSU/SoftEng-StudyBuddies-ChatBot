@@ -1,0 +1,61 @@
+Question - Answer
+What is the main focus of agile methods? - Delivering working software quickly and adapting to change.
+What do agile methods emphasize over documentation? - Working software.
+What is the Agile Manifesto? - A statement of values promoting collaboration, flexibility, and simplicity.
+Name one key value of the Agile Manifesto. - Individuals and interactions over processes and tools.
+What is iterative development? - Repeated cycles of design, build, and test.
+What is incremental delivery? - Delivering the system in small, usable pieces.
+What does XP stand for? - Extreme Programming.
+What is Extreme Programming focused on? - Iterative development and frequent releases.
+How often are releases made in XP? - Every two weeks.
+What is refactoring? - Constant improvement of code without changing its functionality.
+What are user stories? - Short, simple descriptions of a feature told from the user's perspective.
+Who writes user stories in XP? - The customer or user.
+What are the three phases of Scrum? - Outline planning, sprint cycles, and project closure.
+What is a sprint? - A short, fixed-length development cycle, usually 2–4 weeks.
+What is a product backlog? - A list of all tasks and features to be completed.
+Who maintains the product backlog? - The Product Owner.
+Who is the Product Owner? - The person prioritizing features and ensuring business needs are met.
+What is a ScrumMaster? - The facilitator who ensures Scrum rules are followed.
+What does the Scrum team do? - Self-organize to deliver increments of software.
+What is a daily Scrum? - A short daily meeting where progress and plans are discussed.
+What is a potentially shippable product increment? - The output of a sprint ready for release.
+What does “velocity” measure in Scrum? - The amount of work completed in a sprint.
+What happens at the end of each sprint? - A review and demonstration to stakeholders.
+What is pair programming? - Two programmers working together at one computer.
+What is a benefit of pair programming? - Improved code quality and knowledge sharing.
+What is test-first development? - Writing tests before writing the corresponding code.
+What is test-driven development (TDD)? - A process where automated tests guide coding.
+Why is TDD useful? - It clarifies requirements and reduces bugs.
+What is a challenge with TDD? - Writing complete tests for all cases can be difficult.
+What does continuous integration mean? - Merging and testing code changes frequently.
+What are the advantages of agile methods? - Flexibility, faster feedback, and customer satisfaction.
+What are common XP practices? - User stories, refactoring, pair programming, test-first development.
+What is “collective ownership” in XP? - The entire team owns the codebase and can make changes.
+What does “people not process” mean? - Emphasizing human collaboration over rigid rules.
+What is “simple design” in XP? - Keeping design as minimal and understandable as possible.
+What is the main goal of refactoring? - To make code easier to modify later.
+What is a disadvantage of pair programming? - May appear less efficient in the short term.
+What is agile project management? - Managing projects with iterative cycles and team autonomy.
+How does agile differ from plan-driven approaches? - Agile adapts to change; plan-driven focuses on detailed planning.
+What is the first phase in Scrum? - Outline planning.
+What is the role of the ScrumMaster during a sprint? - Protect the team from external distractions.
+What is scaling agile methods? - Adapting agile practices for large or distributed teams.
+What is “scaling up”? - Using agile for large projects requiring multiple teams.
+What is “scaling out”? - Expanding agile practices across an entire organization.
+Why is scaling agile difficult? - Coordination and communication become harder.
+What is a common agile problem in long projects? - Maintaining documentation and team continuity.
+What is agile maintenance? - Supporting ongoing system updates using agile principles.
+Why is documentation limited in agile? - To focus effort on working code and communication.
+What is a drawback of limited documentation? - Harder maintenance when team members leave.
+What does “continuous delivery” mean? - Frequently releasing small, working updates.
+What are Scrum benefits? - Transparency, adaptability, and improved communication.
+What is “process visibility”? - Everyone knows what is happening in the project.
+What is an example of an agile framework? - Scrum.
+What is another example of an agile framework? - Kanban.
+What is a sprint review? - A meeting to showcase completed work to stakeholders.
+What is sprint planning? - Selecting backlog items for the next sprint.
+What is a sprint retrospective? - A meeting to reflect on how to improve future sprints.
+Why is customer feedback important in agile? - It ensures the product meets user needs.
+What is the main limitation of agile? - It may be harder to manage large, regulated projects.
+What is the end goal of agile development? - To deliver value quickly and continuously improve.

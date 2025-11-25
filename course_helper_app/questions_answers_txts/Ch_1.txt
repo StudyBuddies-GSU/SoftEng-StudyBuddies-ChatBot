@@ -1,0 +1,65 @@
+Question - Answer
+What is software engineering? - The discipline concerned with all aspects of software production.
+How does software engineering differ from programming? - It focuses on systematic development rather than just coding.
+What is the goal of software engineering? - To produce reliable, efficient, and maintainable software systems.
+What are the four main process activities? - Specification, development, validation, and evolution.
+What is software specification? - Defining what the system should do and its constraints.
+What is software development? - Designing and implementing the software.
+What is software validation? - Checking that the system meets the requirements.
+What is software evolution? - Modifying software to meet changing needs.
+What does "maintainability" mean in software? - The ease of changing a system to fix defects or adapt to change.
+What is "dependability"? - The ability of a system to operate as expected.
+What is "efficiency" in software? - The ability to perform tasks without wasting resources.
+What is "usability"? - The ease with which users can learn and use the system.
+Why is software engineering important? - It ensures that software is developed systematically and reliably.
+What is a software process? - A structured set of activities used to produce software.
+What are plan-driven processes? - Processes where all activities are planned in advance.
+What are agile processes? - Processes based on incremental, iterative development.
+What is the main challenge in software engineering? - Managing complexity while maintaining quality.
+What are the two major types of software products? - Generic products and customized products.
+What are generic products? - Standalone systems sold to any customer.
+What are customized products? - Systems developed for specific customers.
+What is professional software? - Software developed for business or personal use.
+What is web-based software? - Applications that run on a web server.
+What are system requirements? - Detailed descriptions of system functionality.
+What is the software lifecycle? - The stages a software product goes through from creation to retirement.
+What are system stakeholders? - People who influence or are affected by the system.
+What is software quality assurance? - The process of ensuring that software meets quality standards.
+What is verification? - Ensuring the product meets its specifications.
+What is validation? - Ensuring the product fulfills user needs.
+What is reusability? - The ability to use existing software components in new systems.
+What is portability? - The ease with which software can run on different platforms.
+What is scalability? - The ability to handle increasing workloads.
+What is software reliability? - The likelihood of software operating without failure.
+What are emergent properties? - System characteristics that arise from component interactions.
+What is a software crisis? - The difficulty of writing correct, efficient, and maintainable programs.
+What causes software failures? - Poor requirements, design errors, and lack of testing.
+What are the benefits of using process models? - They provide structure and predictability to software development.
+What is the waterfall model? - A linear software development model with defined stages.
+What is the main disadvantage of the waterfall model? - Difficulty adapting to changing requirements.
+What is incremental development? - Building the system in small pieces with feedback.
+What is reuse-oriented software engineering? - Building systems by integrating existing components.
+What is software engineering ethics? - The principles guiding professional behavior in software practice.
+What is confidentiality in software ethics? - Respecting users’ privacy and data protection.
+What is competence in software ethics? - Only undertaking work you are qualified to perform.
+What is intellectual property? - The legal rights to use and distribute software.
+What is the ACM/IEEE Code of Ethics? - A set of principles for professional conduct in software engineering.
+What are software engineering principles? - Guidelines like modularity, abstraction, and encapsulation.
+What is modularity? - Dividing software into independent modules.
+What is abstraction? - Focusing on essential details while hiding complexity.
+What is encapsulation? - Bundling data and operations together in a single unit.
+What is version control? - Managing changes to source code over time.
+What tools support software engineering? - IDEs, debuggers, version control, and modeling tools.
+What is process improvement? - Enhancing the way software is developed.
+What is configuration management? - Managing changes to project artifacts systematically.
+What is software maintenance? - Modifying a system after delivery to fix or enhance it.
+What is software testing? - Executing software to detect defects.
+What is requirements engineering? - Eliciting and defining what the system should do.
+What is system modeling? - Creating abstract representations of a system.
+What is software project management? - Planning and controlling software development activities.
+What are software metrics? - Measurements used to assess software quality and performance.
+What is a deliverable? - A tangible output of a software development process.
+Why is documentation important? - It helps others understand and maintain the software.
+What is traceability? - The ability to link requirements through development stages.
+What is risk management in software projects? - Identifying and minimizing project risks.
+What is software evolution planning? - Strategizing updates and improvements post-release.

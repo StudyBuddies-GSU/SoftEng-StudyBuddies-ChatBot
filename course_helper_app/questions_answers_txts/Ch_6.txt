@@ -1,0 +1,63 @@
+Question - Answer
+What is software architecture? - The structure and organization of a software system.
+What is architectural design? - The process of defining a system’s structure and high-level organization.
+What are architectural design decisions? - Choices about the system’s type, distribution, and architectural style.
+What are architectural views? - Perspectives showing different aspects of a system, such as logical or physical.
+What are the four main views in the 4+1 model? - Logical, process, development, and physical.
+What is the “+1” in the 4+1 view model? - Use cases that connect all other views.
+What does the logical view show? - Key abstractions in the system as objects or classes.
+What does the process view show? - How the system’s processes interact at runtime.
+What does the development view show? - How the software is divided for development.
+What does the physical view show? - The hardware and how software components are distributed.
+What is an architectural pattern? - A reusable solution to a common design problem.
+What do architectural patterns include? - Description, usage context, advantages, and disadvantages.
+What is the benefit of architectural patterns? - They promote reuse of proven system structures.
+What is the layered architecture? - An architecture organizing functionality into separate layers.
+What is a repository architecture? - A system where components share data through a central repository.
+What is a pipe-and-filter architecture? - Data is processed through a sequence of filters connected by pipes.
+What is a client–server architecture? - A system divided into clients that request services and servers that provide them.
+What are advantages of client–server architecture? - Centralized control and easier maintenance.
+What are disadvantages of client–server architecture? - Possible server overload and network dependency.
+What is the MVC pattern? - Model–View–Controller, separating data, interface, and logic.
+What does the Model in MVC handle? - Data management and core functionality.
+What does the View in MVC handle? - Presentation of data to users.
+What does the Controller in MVC handle? - User input and coordination between model and view.
+What is the benefit of MVC? - Allows data and presentation to change independently.
+What is a downside of MVC? - Can increase code complexity.
+What is a layered system used for? - Modeling subsystem interfaces and separating concerns.
+What is an example of a layered system? - Operating systems and network stacks.
+What is a transaction processing system? - A system managing user requests to access or modify database data.
+What is a transaction? - A coherent sequence of operations achieving a goal.
+What is an example of a transaction? - Finding flight times between two cities.
+What is an information systems architecture? - A layered architecture organizing user interfaces, communication, retrieval, and databases.
+What are common layers in information systems? - User interface, communications, information retrieval, and database.
+What are web-based information systems? - Systems where the user interface is accessed through a web browser.
+What is a multi-tier client–server system? - A system with web, application, and database servers.
+What does the web server handle? - User communications and interface presentation.
+What does the application server handle? - Application logic and data processing.
+What does the database server handle? - Storage, retrieval, and transaction management.
+What are application architectures? - Generic structures for particular types of software systems.
+What is the use of application architectures? - To guide design, assess reuse, and organize team work.
+What is a data processing application? - A system that processes batches of data without user interaction.
+What is a transaction processing application? - A system that handles requests and updates databases interactively.
+What is an event processing system? - A system that reacts to external events from its environment.
+What is a language processing system? - A system that translates or interprets language inputs.
+What is a compiler? - A language processing system translating code to machine form.
+What are the main components of a compiler? - Lexical analyzer, syntax analyzer, semantic analyzer, code generator, and symbol table.
+What does the lexical analyzer do? - Converts source code into tokens.
+What does the syntax analyzer do? - Checks code structure against grammatical rules.
+What does the semantic analyzer do? - Ensures the program is logically correct.
+What does the code generator do? - Transforms internal representations into executable code.
+What does the symbol table store? - Names of variables, objects, and classes used in translation.
+What is a repository architecture for a compiler? - Stores shared data structures like syntax trees and symbol tables.
+What is a pipe-and-filter compiler architecture? - Organizes translation steps as filters processing data sequentially.
+When is pipe-and-filter used? - In batch and data-processing applications.
+What are advantages of pipe-and-filter? - Simplicity, reusability, and clear data flow.
+What are disadvantages of pipe-and-filter? - Data format conversion overhead and limited interactivity.
+What is an example of a pipe-and-filter system? - An electronic payment or invoice processing system.
+What are the benefits of architectural modeling? - Helps compare, validate, and reuse large-scale components.
+What is an architectural view diagram used for? - To communicate design decisions and system organization.
+Why use multiple architectural views? - Each view highlights a different aspect of the system.
+What is a generic application architecture? - A reusable blueprint adaptable for similar applications.
+Why use architectural patterns? - To standardize and improve design quality and communication.
+What is the main goal of architectural design? - To define a structure that meets functional and non-functional requirements.

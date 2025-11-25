@@ -2,8 +2,10 @@ import base64
 import os
 import time
 from datetime import datetime
+from functools import lru_cache
 from html import escape
-from typing import List, Optional
+from pathlib import Path
+from typing import Dict, List, Optional, Tuple
 
 import psycopg2
 import streamlit as st
@@ -29,6 +31,26 @@ def get_tz():
         return None
 
 APP_TZ = get_tz()
+
+BASE_DIR = Path(__file__).resolve().parent
+FLASHCARD_DIR = BASE_DIR / "questions_answers_txts"
+
+VECTOR_STORE_NAME = os.getenv("OPENAI_VECTOR_STORE_NAME", "vector1")
+VECTOR_STORE_ID_ENV = os.getenv("OPENAI_VECTOR_STORE_ID")
+CHATBOT_VECTOR_MODEL = os.getenv("CHATBOT_VECTOR_MODEL", "gpt-4o-mini")
+CHATBOT_FALLBACK_MODEL = os.getenv("CHATBOT_FALLBACK_MODEL", "gpt-5-nano")
+CHATBOT_SYSTEM_PROMPT = (
+    "You are a helpful course assistant for a Software Engineering class. "
+    "Do not exceed 8 sentences for your answer. "
+    "Use the syllabus file to answer the syllabus. "
+    "Use the chapter material (files may start with CH) to answer content about the course and its material. "
+    "If you're listing, use bullet points with newlines or a numbered list with newlines."
+)
+DEFAULT_CHATBOT_FALLBACK = (
+    "I’m sorry, I cannot help you with that. "
+    "That question falls out of scope with the course material and syllabus. "
+    "I’m here to help with questions more relevant to your Software Engineering course."
+)
 
 def now_in_app_tz() -> datetime:
     if APP_TZ:
@@ -237,7 +259,160 @@ def init_connection():
         port=DB_PORT,
     )
 
+
+@lru_cache(maxsize=1)
+def get_vector_store_id() -> Optional[str]:
+    """Resolve the OpenAI vector store ID from env or by name."""
+    if VECTOR_STORE_ID_ENV:
+        return VECTOR_STORE_ID_ENV
+
+    target = VECTOR_STORE_NAME
+    if not target:
+        return None
+    if target.startswith("vs_"):
+        return target
+
+    try:
+        cursor = None
+        while True:
+            page = client.vector_stores.list(after=cursor) if cursor else client.vector_stores.list()
+            for store in getattr(page, "data", []):
+                if getattr(store, "name", None) == target or getattr(store, "id", None) == target:
+                    return store.id
+            if not getattr(page, "has_more", False):
+                break
+            cursor = getattr(page, "last_id", None)
+            if not cursor:
+                break
+    except Exception:
+        return None
+    return None
+
+
+def _vector_store_response(prompt: str) -> Optional[str]:
+    """Query the configured vector store using the Responses API."""
+    store_id = get_vector_store_id()
+    if not store_id:
+        return None
+    try:
+        resp = client.responses.create(
+            model=CHATBOT_VECTOR_MODEL,
+            input=prompt,
+            tools=[{"type": "file_search", "vector_store_ids": [store_id]}],
+        )
+    except Exception:
+        return None
+
+    text = getattr(resp, "output_text", None)
+    if text:
+        return text.strip()
+    return None
+
+
+def _generate_chatbot_answer(prompt: str, chapter_scope: Optional[int] = None, fallback: Optional[str] = None) -> str:
+    """Return an answer grounded in the vector store content with graceful fallback."""
+    fallback_text = fallback or DEFAULT_CHATBOT_FALLBACK
+    if not prompt:
+        return fallback_text
+
+    scoped_prompt = prompt.strip()
+    if chapter_scope:
+        scoped_prompt = (
+            f"Stay within the scope of Chapter {chapter_scope} unless the user explicitly asks otherwise.\n\n{scoped_prompt}"
+        )
+
+    final_prompt = f"{CHATBOT_SYSTEM_PROMPT}\n\n{scoped_prompt}"
+
+    vector_answer = _vector_store_response(final_prompt)
+    if vector_answer:
+        return vector_answer
+
+    try:
+        response = client.chat.completions.create(
+            model=CHATBOT_FALLBACK_MODEL,
+            messages=[
+                {"role": "system", "content": CHATBOT_SYSTEM_PROMPT},
+                {"role": "user", "content": scoped_prompt},
+            ],
+        )
+        content = response.choices[0].message.content if response.choices else None
+        return (content or fallback_text).strip()
+    except Exception:
+        return fallback_text
+
+
+def get_chatbot_response(
+    prompt: str, chapter_scope: Optional[int] = None, fallback: Optional[str] = None
+) -> Tuple[str, ...]:
+    """Public helper retained for compatibility with existing tests."""
+    answer = _generate_chatbot_answer(prompt, chapter_scope, fallback)
+    return (answer,) if answer else ()
+
+
+def _parse_flashcard_line(line: str) -> Optional[Tuple[str, str]]:
+    if " - " not in line:
+        return None
+    question, answer = line.split(" - ", 1)
+    question = question.strip()
+    answer = answer.strip()
+    if not question or not answer:
+        return None
+    return question, answer
+
+
+def _load_chapter_from_file(path: Path) -> List[Tuple[str, str]]:
+    cards: List[Tuple[str, str]] = []
+    try:
+        lines = path.read_text(encoding="utf-8").splitlines()
+    except FileNotFoundError:
+        return cards
+
+    for raw_line in lines:
+        line = raw_line.strip()
+        if not line:
+            continue
+        if "question" in line.lower() and "answer" in line.lower():
+            # Skip header rows.
+            continue
+        parsed = _parse_flashcard_line(line)
+        if parsed:
+            cards.append(parsed)
+    return cards
+
+
+@lru_cache(maxsize=1)
+def load_flashcard_bank() -> Dict[int, List[Tuple[str, str]]]:
+    bank: Dict[int, List[Tuple[str, str]]] = {}
+    if not FLASHCARD_DIR.exists():
+        return bank
+
+    for path in sorted(FLASHCARD_DIR.glob("Ch_*.txt")):
+        chapter_token = path.stem.split("_", 1)[-1]
+        try:
+            chapter_id = int(chapter_token)
+        except ValueError:
+            continue
+        if chapter_id <= 0:
+            continue
+        cards = _load_chapter_from_file(path)
+        if cards:
+            bank[chapter_id] = cards
+    return bank
+
+
 def get_flashcards(conn, chapter=None):
+    bank = load_flashcard_bank()
+    if bank:
+        if chapter is None:
+            merged: List[Tuple[str, str]] = []
+            for cards in bank.values():
+                merged.extend(cards)
+            return merged
+        return bank.get(chapter, [])
+
+    if not conn:
+        return []
+
     with conn.cursor() as cur:
         if chapter:
             cur.execute("SELECT question, answer FROM flashcards WHERE chapter = %s;", (chapter,))
@@ -249,13 +424,13 @@ def get_fallback_message(conn):
     with conn.cursor() as cur:
         cur.execute("SELECT fallback_message FROM fallbacks LIMIT 1;")
         result = cur.fetchone()
-        return result[0] if result else (
-            "I’m sorry, I cannot help you with that. "
-            "That question falls out of scope with the course material and syllabus. "
-            "I’m here to help with questions more relevant to your Software Engineering course."
-        )
+        return result[0] if result else DEFAULT_CHATBOT_FALLBACK
 
 def get_chapter_ids(conn) -> List[int]:
+    bank_chapters = [chapter for chapter in sorted(load_flashcard_bank().keys()) if chapter > 0]
+    if bank_chapters:
+        return bank_chapters
+
     default_chapters = [1, 2, 3, 4, 5, 6, 8, 9, 12, 23]
     if not conn:
         return default_chapters
@@ -263,7 +438,8 @@ def get_chapter_ids(conn) -> List[int]:
         with conn.cursor() as cur:
             cur.execute("SELECT DISTINCT chapter FROM flashcards WHERE chapter IS NOT NULL ORDER BY chapter;")
             rows = [row[0] for row in cur.fetchall()]
-        return rows or default_chapters
+        cleaned_rows = [row for row in rows if isinstance(row, int) and row > 0]
+        return cleaned_rows or default_chapters
     except Exception:
         return default_chapters
 
@@ -401,20 +577,9 @@ if st.session_state.screen == "chatbot":
         message_placeholder = st.empty()
         full_response = ""
 
-        try:
-            response = client.chat.completions.create(
-                model="gpt-5-nano",
-                messages=[
-                    {
-                        "role": "system",
-                        "content": "You are a helpful course assistant for a Software Engineering class. Do not exceed 6 sentences for your answer",
-                    },
-                    {"role": "user", "content": prompt},
-                ],
-            )
-            assistant_response = response.choices[0].message.content or fallback_message
-        except Exception as e:
-            assistant_response = f"⚠️ API error: {e}"
+        assistant_response = _generate_chatbot_answer(prompt, fallback=fallback_message)
+        if not assistant_response:
+            assistant_response = fallback_message
 
         for chunk in assistant_response.split():
             full_response += chunk + " "
@@ -471,7 +636,7 @@ else:
     try:
         flashcards = (
             get_flashcards(conn, st.session_state.chapter)
-            if (conn and st.session_state.chapter)
+            if st.session_state.chapter
             else []
         )
     except Exception:
