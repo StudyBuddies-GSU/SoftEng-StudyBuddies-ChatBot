@@ -45,6 +45,7 @@ CHATBOT_SYSTEM_PROMPT = (
     "Use the syllabus file to answer the syllabus. "
     "Use the chapter material (files may start with CH) to answer content about the course and its material. "
     "If you're listing, use bullet points with newlines or a numbered list with newlines."
+    "If the question isn't about the course material, the course, or the syllabus (as in, it it's outside the scope of our course entirely), then return a fallback message stating you cannot help with that."
 )
 DEFAULT_CHATBOT_FALLBACK = (
     "I’m sorry, I cannot help you with that. "
