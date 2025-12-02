@@ -705,12 +705,9 @@ else:
                     The correct answer is: \"{answer}\".
                     The student's answer was: \"{user_answer}\".
 
-                    Begin your response with \"Correct.\" if the student's answer sufficiently conveys the same ideas.
-                    Otherwise, begin with \"Incorrect.\"
-
                     Provide brief, constructive feedback in 2-3 sentences.
-                    If the answer is correct, offer encouragement.
-                    If the answer is incorrect, gently explain the misunderstanding without simply giving the answer away.
+                    Begin your response with \"Correct.\" if the student's answer sufficiently conveys the same ideas.
+                    Otherwise, begin with \"Incorrect.\", and explain the disconnect without giving the answer away.
                     """
                     response = client.chat.completions.create(
                         model="gpt-5-nano",
