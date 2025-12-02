@@ -260,7 +260,6 @@ def init_connection():
         port=DB_PORT,
     )
 
-
 @lru_cache(maxsize=1)
 def get_vector_store_id() -> Optional[str]:
     """Resolve the OpenAI vector store ID from env or by name."""
@@ -289,7 +288,6 @@ def get_vector_store_id() -> Optional[str]:
         return None
     return None
 
-
 def _vector_store_response(prompt: str) -> Optional[str]:
     """Query the configured vector store using the Responses API."""
     store_id = get_vector_store_id()
@@ -308,7 +306,6 @@ def _vector_store_response(prompt: str) -> Optional[str]:
     if text:
         return text.strip()
     return None
-
 
 def _generate_chatbot_answer(prompt: str, chapter_scope: Optional[int] = None, fallback: Optional[str] = None) -> str:
     """Return an answer grounded in the vector store content with graceful fallback."""
@@ -448,17 +445,17 @@ def get_chapter_ids(conn) -> List[int]:
 if "screen" not in st.session_state:
     st.session_state.screen = "chatbot"
 if "messages" not in st.session_state:
-   st.session_state.messages = []
+    st.session_state.messages = []
 if "chapter" not in st.session_state:
-   st.session_state.chapter = None
+    st.session_state.chapter = None
 if "card_index" not in st.session_state:
-   st.session_state.card_index = 0
+    st.session_state.card_index = 0
 if "show_answer" not in st.session_state:
-   st.session_state.show_answer = False
+    st.session_state.show_answer = False
 if "last_result" not in st.session_state:
     st.session_state.last_result = None
 if "feedback" not in st.session_state:
-   st.session_state.feedback = None
+    st.session_state.feedback = None
 
 def reset_learning_state():
     st.session_state.card_index = 0
@@ -467,12 +464,12 @@ def reset_learning_state():
     st.session_state.feedback = None
 
 try:
-   conn = init_connection()
-   fallback_message = get_fallback_message(conn)
+    conn = init_connection()
+    fallback_message = get_fallback_message(conn)
 except Exception as e:
-   fallback_message = "⚠️ Could not connect to the database."
-   st.error(f"Database error: {e}")
-   conn = None
+    fallback_message = "⚠️ Could not connect to the database."
+    st.error(f"Database error: {e}")
+    conn = None
 
 def render_bubble(role: str, text: str, ts_iso: Optional[str] = None):
     """Render a chat bubble with timestamp below."""
@@ -528,7 +525,7 @@ with st.sidebar:
             st.rerun()
 
 
-   st.markdown("---")
+    st.markdown("---")
 
     if st.session_state.screen == "chatbot":
         if st.button("Clear Chat History 🗑️", use_container_width=True):
@@ -547,7 +544,7 @@ with st.sidebar:
                 st.rerun()
 
 if st.session_state.screen == "chatbot":
-   st.title("🤓💻 SWE Chatbot")
+    st.title("🤓💻 SWE Chatbot")
 
     if not st.session_state.messages:
         st.markdown(
@@ -734,8 +731,8 @@ else:
                 st.rerun()
 
             if st.session_state.feedback:
-               with st.expander("🤖 Show AI Feedback", expanded=True):
-                   st.info(st.session_state.feedback)
+                with st.expander("🤖 Show AI Feedback", expanded=True):
+                    st.info(st.session_state.feedback)
 
         st.markdown("---")
         nav_left, nav_center, nav_right = st.columns([1, 0.5, 1])
